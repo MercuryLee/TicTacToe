@@ -2,17 +2,16 @@
 #include<stdlib.h>
 #include<windows.h>
 #pragma warning(disable:4996)
-
+int cursorx = 7;
+int cursory = 3;
 #define UP 0
 #define DOWN 1
 #define LEFT 2
 #define RIGHT 3
 #define SUBMIT 4
-#define FSIZE 7
-#define MUNGTANGE 18
-#define Xs "○" //1
-#define Os "×" //-1
-
+#define FSIZE 21
+#define OS 1
+#define XS -1
 int gotoxy(int x, int y) {//x, y로 커서 움직여줌
     HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD pos;
@@ -20,7 +19,7 @@ int gotoxy(int x, int y) {//x, y로 커서 움직여줌
     pos.Y = y;
     SetConsoleCursorPosition(consoleHandle, pos);
     return 0;
-}
+} 
 void init() {// 처음 세팅
     system("mode con cols=95 lines=20| title TicTacToe");//87 + 8 = 95
     printf("\n\n\n\n");
@@ -49,7 +48,7 @@ int keyControl() {// 키 받아서 움직이기
         return SUBMIT;
     }
 }
-void GameDes() {
+int GameDesDraw() {
     system("cls"); //콘솔창 깔끔하게 지우기, 좌표 0, 0로 정하기
     printf("\n\n\n\n");
     printf("                   Tic-tac-toe is a paper-and-pencil game for two players who    \n");
@@ -106,12 +105,15 @@ void GameDes() {
 int menuDraw() {
     int x = 43;
     int y = 12;
+    gotoxy(x - 15, y - 11);
+    printf("TAB WASD TO MOVE, TAB SPACE TO SELECT");
     gotoxy(x - 2, y);
     printf("> 게임시작");
     gotoxy(x, y + 1);
     printf("게임정보");
     gotoxy(x, y + 2);
     printf("  종료  ");
+    gotoxy(x - 1, y);
     while (1) {
         int n = keyControl();
         switch (n) {
@@ -139,7 +141,7 @@ int menuDraw() {
                 return 0;
             }
             else if (y == 13) {
-                GameDes();
+                GameDesDraw();
                 return 0;
             }
             else if (y == 14) {
@@ -151,7 +153,7 @@ int menuDraw() {
 }
 void DrawFrame() {
     system("cls");
-    system("mode con cols=40 lines=40| title TicTacToe");
+    system("mode con cols=50 lines=50| title TicTacToe");
 
     unsigned char a = 0xa6;
     unsigned char b[12];
@@ -160,10 +162,10 @@ void DrawFrame() {
         b[i] = 0xa0 + i;
     }
 
-        printf("%c%c%c%c", a, b[3], a, b[1]);
+    printf("%c%c%c%c", a, b[3], a, b[1]);
 
-    for (int i = 1; i < MUNGTANGE; i++) {
-        if (i % (MUNGTANGE / 3) != 0) {
+    for (int i = 1; i < FSIZE; i++) {
+        if (i % (FSIZE / 3) != 0) {
             printf("%c%c%c%c", a, b[1], a, b[1]);
         }
         else {
@@ -172,9 +174,9 @@ void DrawFrame() {
     }
     printf("%c%c\n", a, b[4]);//첫번째 줄
 
-    for (int i = 0; i <= MUNGTANGE / 6; i++) {
-        for (int i = 0; i <= MUNGTANGE; i++) {
-            if (i % (MUNGTANGE / 3) == 0) {
+    for (int i = 0; i <= 4; i++) {
+        for (int i = 0; i <= FSIZE; i++) {
+            if (i % (FSIZE / 3) == 0) {
                 printf("%c%c ", a, b[2]);
             }
             else {
@@ -186,8 +188,8 @@ void DrawFrame() {
 
     printf("%c%c%c%c", a, b[7], a, b[1]);
 
-    for (int i = 1; i < MUNGTANGE; i++) {
-        if (i % (MUNGTANGE / 3) != 0) {
+    for (int i = 1; i < FSIZE; i++) {
+        if (i % (FSIZE / 3) != 0) {
             printf("%c%c%c%c", a, b[1], a, b[1]);
         }
         else {
@@ -196,9 +198,9 @@ void DrawFrame() {
     }
     printf("%c%c\n", a, b[9]);//여섯번째 줄
 
-    for (int i = 0; i <= MUNGTANGE / 6; i++) {
-        for (int i = 0; i <= MUNGTANGE; i++) {
-            if (i % (MUNGTANGE / 3) == 0) {
+    for (int i = 0; i <= 4; i++) {
+        for (int i = 0; i <= FSIZE; i++) {
+            if (i % (FSIZE / 3) == 0) {
                 printf("%c%c ", a, b[2]);
             }
             else {
@@ -210,8 +212,8 @@ void DrawFrame() {
 
     printf("%c%c%c%c", a, b[7], a, b[1]);
 
-    for (int i = 1; i < MUNGTANGE; i++) {
-        if (i % (MUNGTANGE / 3) != 0) {
+    for (int i = 1; i < FSIZE; i++) {
+        if (i % (FSIZE / 3) != 0) {
             printf("%c%c%c%c", a, b[1], a, b[1]);
         }
         else {
@@ -220,9 +222,9 @@ void DrawFrame() {
     }
     printf("%c%c\n", a, b[9]);//열한번째 줄
 
-    for (int i = 0; i <= MUNGTANGE / 6; i++) {
-        for (int i = 0; i <= MUNGTANGE; i++) {
-            if (i % (MUNGTANGE / 3) == 0) {
+    for (int i = 0; i <= 4; i++) {
+        for (int i = 0; i <= FSIZE; i++) {
+            if (i % (FSIZE / 3) == 0) {
                 printf("%c%c ", a, b[2]);
             }
             else {
@@ -235,56 +237,46 @@ void DrawFrame() {
 
     printf("%c%c%c%c", a, b[6], a, b[1]);
 
-    for (int i = 1; i < MUNGTANGE; i++) {
-        if (i % (MUNGTANGE / 3) != 0) {
+    for (int i = 1; i < FSIZE; i++) {
+        if (i % (FSIZE / 3) != 0) {
             printf("%c%c%c%c", a, b[1], a, b[1]);
         }
         else {
             printf("%c%c%c%c", a, b[10], a, b[1]);
         }
     }
-    printf("%c%c\n", a, b[5]);//일곱번째 줄
-    
+    printf("%c%c\n", a, b[5]);//마지막 줄
+    printf("            TAB SPACE TO SELECT\n");
 }
-int Rule(char Frame[3][3]) { //매턴마다 돌려주는 규칙
-    if (Row(Frame[3][3])) {
-        return 1;
-    }
-    else if (Col(Frame[3][3])) {
-        return 1;
-    }
-    else if (Dia(Frame[3][3])) {
-        return 1;
-    }
-    return 0;
-}
-int Row(char Frame[3][3]) {
+int PlayerChoose(){
+
+}//PVP OR PVE
+int Row(int Frame[3][3]) {
     for (int i = 0; i < 3; i++) {
-        if (Frame[i][0] == Frame[i][1] && Frame[i][1] == Frame[i][2]) {
+        if (Frame[i][0] == Frame[i][1] && Frame[i][1] == Frame[i][2] && Frame[i][0] != 0) {
             return 1;
         }
     }
     return 0;
 }//가로 확인 함수
-int Col(char Frame[3][3]) {
+int Col(int Frame[3][3]) {
     for (int i = 0; i < 3; i++) {
-        if (Frame[0][i] == Frame[1][i] && Frame[1][i] == Frame[2][i]) {
+        if (Frame[0][i] == Frame[1][i] && Frame[1][i] == Frame[2][i] && Frame[0][i] != 0) {
             return 1;
         }
     }
     return 0;
 }//세로 확인 함수
-int Dia(char Frame[3][3]) {
-    if (Frame[0][0] == Frame[1][1] && Frame[1][1] == Frame[2][2]) {
-        return 1;
-    }
-    else if (Frame[0][2] == Frame[1][1] && Frame[1][1] == Frame[2][0]) {
-        return  1;
-    }
+int Dia(int Frame[3][3]) {
+    if (Frame[0][0] == Frame[1][1] && Frame[1][1] == Frame[2][2] && Frame[0][0] != 0) return 1;
+    else if (Frame[0][2] == Frame[1][1] && Frame[1][1] == Frame[2][0] && Frame[0][2] != 0) return 1;
     return 0;
 }//대각선 확인 함수
-int FrameisFull(char Frame[3][3]) { //다 차있을때 True 리턴
+int GameOverChecker(int Frame[3][3]) { //게임 끝이면 돌리기
     int flag = 1;
+    if (Row(Frame)) return 1;
+    if (Col(Frame)) return 1;
+    if (Dia(Frame)) return 1;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if (Frame[i][j] == 0) {
@@ -294,23 +286,106 @@ int FrameisFull(char Frame[3][3]) { //다 차있을때 True 리턴
     }
     return flag;
 }
+void printX() {
+    gotoxy(cursorx - 4, cursory - 2);
+    printf("*");
+    gotoxy(cursorx - 4, cursory + 2);
+    printf("*");
+    gotoxy(cursorx - 2, cursory - 1);
+    printf("*");
+    gotoxy(cursorx - 2, cursory + 1);
+    printf("*");
+    gotoxy(cursorx + 4, cursory - 2);
+    printf("*");
+    gotoxy(cursorx + 4, cursory + 2);
+    printf("*");
+    gotoxy(cursorx + 2, cursory - 1);
+    printf("*");
+    gotoxy(cursorx + 2, cursory + 1);
+    printf("*");
+    gotoxy(cursorx, cursory);
+    printf("*");
+}
+void printO() {
+    gotoxy(cursorx - 5, cursory - 2);
+    printf("    ***");
+    gotoxy(cursorx - 5, cursory - 1);
+    printf("  **   **");
+    gotoxy(cursorx - 5, cursory);
+    printf(" *       *");
+    gotoxy(cursorx - 5, cursory + 1);
+    printf("  **   **");
+    gotoxy(cursorx - 5, cursory + 2);
+    printf("    ***");
+    gotoxy(cursorx, cursory);
+}
+int GameControl(int Frame[3][3], int turn) {
+    while (1) {
+        int n = keyControl();
+        switch (n) {
+        case UP: {
+            if (cursory > 3) {
+                gotoxy(cursorx, cursory-=6);
+            }
+            break;
+        }
+        case DOWN: {
+            if (cursory < 15) {
+                gotoxy(cursorx, cursory += 6);
+            }
+            break;
+        }
+        case LEFT: {
+            if (cursorx > 7) {
+                gotoxy(cursorx -= 14, cursory);
+            }
+            break;
+        }
+        case RIGHT: {
+            if (cursorx < 35) {
+                gotoxy(cursorx += 14, cursory);
+            }
+            break;
+        }
+        case SUBMIT: {
+            int xx, yy;
+            xx = ((cursorx + 7) / 14) - 1;
+            yy = ((cursory + 3) / 6) - 1;
+            if (Frame[yy][xx] == 0) {
+                if (turn % 2 == 0) {
+                    printX();
+                    Frame[yy][xx] = XS;
+                }
+                else if(turn % 2 == 1) {
+                    printO();
+                    Frame[yy][xx] = OS;
+                }
+                return 0;
+            }
+            break;
+        }
+        }
+    }
+}
+
 int main() {
     init();
     menuDraw();//여기서 다시 리턴하면 게임 시작임
-
     DrawFrame();
 
-    char Frame[3][3];
-
+    gotoxy(cursorx, cursory);
+    int Frame[3][3];
+    
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             Frame[i][j] = 0;
         }
     }
-    
-    while (!Rule(Frame[3][3]) || !FrameisFull(Frame[3][3])) {
-          
+    for (int turn = 1; turn < 10; turn++) {
+        GameControl(Frame, turn);
+        if (GameOverChecker(Frame)) break;
     }
+    system("cls");
 
     return 0;
 }
@@ -330,4 +405,4 @@ And, oh mother, mother for another star...
 
 Have you read these lines before? 
 They are the part of the poem by Yoon Dong-Ju, "Counting Stars at Night". 
-This poem was written a long time ago, but still remains one of the favorite poems of Korea.*/
+This poem was written a long time ago, but still remains one of the Korea's favorite poems.*/
