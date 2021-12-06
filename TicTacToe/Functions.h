@@ -68,6 +68,7 @@ int GameDesDraw() {
     printf("> 메뉴로");
     gotoxy(x, y + 1);
     printf(" 종료  ");
+    gotoxy(x - 1, y);
 
     while (1) {
         int n = keyControl();
@@ -155,7 +156,7 @@ int menuDraw() {
 }
 void DrawFrame() {
     system("cls");
-    system("mode con cols=50 lines=50| title TicTacToe");
+    system("mode con cols=44 lines=22| title TicTacToe");
 
     unsigned char a = 0xa6;
     unsigned char b[12];
@@ -249,10 +250,103 @@ void DrawFrame() {
     }
     printf("%c%c\n", a, b[5]);//마지막 줄
     printf("            TAB SPACE TO SELECT\n");
+    printf("       스페이스바를 눌러 선택하세요");
 }
 int PlayerChoose() {
+    system("cls");
+    int x = 25, y = 7;
+    gotoxy(x - 2, y);
+    printf("> 1P(Person VS Envrionment)(Developing)");
+    gotoxy(x, y + 2);
+    printf("2P(Person VS Person)");
+    gotoxy(x - 1, y);
 
+    while (1) {
+        int n = keyControl();
+        switch (n) {
+        case UP: {
+            if (y == 9) {
+                gotoxy(x - 2, y);
+                printf(" ");
+                gotoxy(x - 2, y -= 2);
+                printf(">");
+            }
+            break;
+        }
+        case DOWN: {
+            if (y == 7) {
+                gotoxy(x - 2, y);
+                printf(" ");
+                gotoxy(x - 2, y += 2);
+                printf(">");
+            }
+            break;
+        }
+
+        case SUBMIT: {
+            if (y == 7) {
+                exit(0);
+            }
+            else if (y == 9) {
+                return 0;
+            }
+        }
+        }
+    }
 }//PVP OR PVE
+int PlayAgain(int turn, int isFull) {
+    int x = 28, y = 2;
+    system("mode con cols=95 lines=20| title GameResults");
+
+    gotoxy(x, y);
+    if (isFull == -1) printf("Draw! 무승부입니다!");
+    else if (turn % 2 == 1) printf("P1 Win! 첫번째 플레이어가 승리했습니다!");
+    else if (turn % 2 == 0) printf("P2 Win! 두번째 플레이어가 승리했습니다!");
+
+    gotoxy(x + 1, y + 3);
+    printf("Do you want to play TicTacToe again ?");
+    gotoxy(x + 5, y + 4);
+
+    printf("게임을 한판 더 하시겠습니까 ?");
+    gotoxy(x + 3, y + 6);
+    printf("> Yes, I want to play it again.");
+    gotoxy(x+ 10, y + 7);
+    printf("네, 한판 더 할래요.");
+    gotoxy(x + 2, y + 9);
+    printf("No, I don't want to play it again.");
+    gotoxy(x + 10, y + 10);
+    printf("아니요, 그만할게요.");
+    gotoxy(x + 4, y += 6);
+    
+    while (1) {
+        int n = keyControl();
+        switch (n) {
+        case DOWN: {
+            if (y == 8) {
+                gotoxy(x + 3, y);
+                printf(" ");
+                gotoxy(x, y += 3);
+                printf(">");
+            }
+            break;
+        }
+        case UP: {
+            if (y == 11) {
+                gotoxy(x, y);
+                printf(" ");
+                gotoxy(x + 3, y -= 3);
+                printf(">");
+            }
+            break;
+        }
+        case SUBMIT: {
+            if (y == 8) return 1;
+            else  return 0;
+        }
+        }
+    }
+
+}
 int Row(int Frame[3][3]) {
     for (int i = 0; i < 3; i++) {
         if (Frame[i][0] == Frame[i][1] && Frame[i][1] == Frame[i][2] && Frame[i][0] != 0) {
@@ -275,7 +369,7 @@ int Dia(int Frame[3][3]) {
     return 0;
 }//대각선 확인 함수
 int GameOverChecker(int Frame[3][3]) { //게임 끝이면 돌리기
-    int flag = 1;
+    int flag = -1;
     if (Row(Frame)) return 1;
     if (Col(Frame)) return 1;
     if (Dia(Frame)) return 1;
