@@ -139,10 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Functions.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="TicTacToebot.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="TicTacToebot.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="BotFloatingChart.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

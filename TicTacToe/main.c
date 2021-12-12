@@ -2,31 +2,27 @@
 #include<stdlib.h>
 #include<windows.h>
 #include"Functions.h"
+#include"TicTacToebot.h"
 
 int main() {
-    init();
+    TicTacToeprint();
     menuDraw();//여기서 다시 리턴하면 게임 시작임
 
-    int Frame[3][3];
+    int frame[3][3];
     int turn;
 
     while (1) {
         PlayerChoose();
         DrawFrame();
-
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                Frame[i][j] = 0;
-            }
-        }
+        FrameInit(frame);
         cursorx = 7;
         cursory = 3;
         gotoxy(cursorx, cursory);
         for (turn = 1; turn < 10; turn++) {
-            GameControl(Frame, turn);
-            if (GameOverChecker(Frame) || GameOverChecker(Frame)== -1) break;
+            GameControl(frame, turn);
+            if (GameOverChecker(frame) || GameOverChecker(frame)== -1) break;
         }
-        if (!PlayAgain(turn, GameOverChecker(Frame))) break;
+        if (!PlayAgain(turn, GameOverChecker(frame))) break;
         else continue;
     }
 
