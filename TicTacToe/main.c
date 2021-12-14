@@ -12,18 +12,25 @@ int main() {
     int turn;
 
     while (1) {
-        PlayerChoose();
         DrawFrame();
         FrameInit(frame);
         cursorx = 7;
         cursory = 3;
         gotoxy(cursorx, cursory);
-        for (turn = 1; turn < 10; turn++) {
-            GameControl(frame, turn);
-            if (GameOverChecker(frame) || GameOverChecker(frame)== -1) break;
+        if (PlayerChoose()) {
+            for (turn = 1; turn < 10; turn++) {
+                if (turn % 2 == 1) GameControl(frame, turn);
+                else Botmain();
+                if (GameOverChecker(frame) || GameOverChecker(frame) == -1) break;
+            }
+        }
+        else {
+            for (turn = 1; turn < 10; turn++) {
+                GameControl(frame, turn);
+                if (GameOverChecker(frame) || GameOverChecker(frame) == -1) break;
+            }
         }
         if (!PlayAgain(turn, GameOverChecker(frame))) break;
-        else continue;
     }
 
     return 0;

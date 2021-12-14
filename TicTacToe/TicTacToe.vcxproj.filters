@@ -21,7 +21,7 @@
     <ClCompile Include="Functions.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="TicTacToebot.cpp">
+    <ClCompile Include="TicTacToebot.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

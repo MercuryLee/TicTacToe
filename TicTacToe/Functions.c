@@ -292,7 +292,7 @@ int PlayerChoose() {
 
         case SUBMIT: {
             if (y == 7) {
-                exit(0);
+                return 1;
             }
             else if (y == 9) {
                 return 0;
@@ -422,7 +422,7 @@ void printO() {
     printf("    ***");
     gotoxy(cursorx, cursory);
 }
-int GameControl(int frame[3][3], int turn) {
+int GameControl(int frame[3][3], int turn, int x, int y) {
     while (1) {
         int n = keyControl();
         switch (n) {

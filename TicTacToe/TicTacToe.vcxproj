@@ -141,7 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Functions.c" />
     <ClCompile Include="main.c" />
-    <ClCompile Include="TicTacToebot.cpp" />
+    <ClCompile Include="TicTacToebot.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Functions.h" />
