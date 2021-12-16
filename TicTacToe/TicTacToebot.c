@@ -1,4 +1,8 @@
 #include<stdio.h>
+#include<Windows.h>
+#include<stdlib.h>
+#include<conio.h>
+#include"Functions.h"
 
 void CheckGameOver(int frame[3][3], int score[3][3]) {//내가 게임을 끝낼수 있으면, 스코어에 20, 내가 끝날 위기라면, 스코어에 10
 	int occnum ,i, j, k, q, point;
@@ -32,7 +36,7 @@ void ExcludeScore(int frame[3][3], int score[3][3]) {
 	for (i = 0; i < 3; i++) {
 		for (j = 0; j < 3; j++) {
 			if (frame[i][j] != 0) {
-				score[i][j] = -100;
+				score[i][j] = -500;
 			}
 			else {
 				k = j + 1;
@@ -57,21 +61,66 @@ void ExcludeScore(int frame[3][3], int score[3][3]) {
 	if (frame[2][0] != frame[0][2] && frame[2][0] != 0 && frame[0][2] != 0) score[1][1] = -50;
 	if (frame[0][2] != frame[1][1] && frame[0][2] != 0 && frame[1][1] != 0) score[2][0] = -50;
 }
+void AddScoreDia(int score[3][3]) {
+	int i, j;
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < 3; j++) {
+			if (score[i][j] != -500) {
+				if (i + j == 1 || i + j == 3) score[i][j] += 30;
+				else if (i + j == 2 || i == j) score[i][j] += 50;
+			}
+		}
+	}
+}
 int BotMain(int frame[3][3]) {
-	int score[3][3], i, j, hs = -100;
+	int score[3][3], i, j, x, y;
+	int hs = -100, ss = 1;//hightest score, samescore
 
 	for (i = 0; i < 3; i++) {
 		for (j = 0; j < 3; j++) {
 			score[i][j] = 0;
 		}
 	}
-	if (frame[1][1] == 0) score[1][1] = 20;
 
-	CheckGameOver(frame, score); //게임이 끝낼수 있을때 놓기
-	ExcludeScore(frame, score);
+	if (frame[1][1] == 0) score[1][1] = 20;//1
 
-	for (i = 0; i < 3; i++) for (j = 0; j < 3; j++) if (score[i][j] > hs) hs = score[i][j];
-	for (i = 0; i < 3; i++) for (j = 0; j < 3; j++) if (score[i][j] == hs) break;
+	CheckGameOver(frame, score); //2, 3
+	ExcludeScore(frame, score);//4
+	AddScoreDia(score);//5
 
+	for (i = 0; i < 3; i++) {
+		for (j = 0; j < 3; j++) {
+			if (score[i][j] == hs) {
+				ss++;
+			}
+			else if (score[i][j] > hs) {
+				ss = 1;
+				hs = score[i][j];
+			}
+		}
+	}
+
+	if (ss > 0) {
+		int randint = rand() % ss;
+		for (i = 0; i < 3; i++) {
+			for (j = 0; j < 3; j++) {
+				if (score[i][j] == hs) randint--;
+				if (randint == 0) break;
+			}
+		}
+	}
+
+	else if (ss == 0) {
+		for (i = 0; i < 3; i++) {
+			for (j = 0; j < 3; j++) {
+				if (score[i][j] == hs) break;
+			}
+		}
+	}
+
+	gotoxy(cursorx + (14 * j), cursory + (6 * i));
+	printX();
+	frame[j][i] = XS;
+	
 	return 0;
 }

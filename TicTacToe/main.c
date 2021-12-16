@@ -1,6 +1,7 @@
 #include<stdio.h>
+#include<Windows.h>
 #include<stdlib.h>
-#include<windows.h>
+#include<conio.h>
 #include"Functions.h"
 #include"TicTacToebot.h"
 
@@ -20,7 +21,7 @@ int main() {
         if (PlayerChoose()) {
             for (turn = 1; turn < 10; turn++) {
                 if (turn % 2 == 1) GameControl(frame, turn);
-                else Botmain();
+                else Botmain(frame);
                 if (GameOverChecker(frame) || GameOverChecker(frame) == -1) break;
             }
         }

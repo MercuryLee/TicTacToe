@@ -422,7 +422,7 @@ void printO() {
     printf("    ***");
     gotoxy(cursorx, cursory);
 }
-int GameControl(int frame[3][3], int turn, int x, int y) {
+int GameControl(int frame[3][3], int turn) {
     while (1) {
         int n = keyControl();
         switch (n) {
